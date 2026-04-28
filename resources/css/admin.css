@@ -1,0 +1,120 @@
+/* ===== GLOBAL ===== */
+body{
+    background:#0b0b0b;
+    color:#fff;
+    font-family:'Segoe UI',sans-serif;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+    width:240px;
+    height:100vh;
+    position:fixed;
+    background:#0d0d0d;
+    border-right:1px solid #1f1f1f;
+}
+
+.brand{
+    color:#ffc107;
+    font-weight:bold;
+    padding:20px;
+    font-size:20px;
+}
+
+.menu-item{
+    padding:14px 22px;
+    color:#aaa;
+    display:block;
+    text-decoration:none;
+}
+.menu-item:hover{
+    background:#111;
+    color:#ffc107;
+}
+.menu-active{
+    background:#111;
+    border-left:4px solid #ffc107;
+    color:#ffc107;
+}
+
+/* ===== MAIN AREA ===== */
+.main{
+    margin-left:240px;
+    padding:30px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.page-title{ font-size:34px; font-weight:700 }
+.small-text{ font-size:12px; color:#aaa }
+.yellow{ color:#ffc107 }
+
+/* ===== CARD ===== */
+.card-dark{
+    background:linear-gradient(145deg,#1a1a1a,#111);
+    border:1px solid #1f1f1f;
+    padding:25px;
+    border-radius:12px;
+}
+
+/* ===== TABLE ===== */
+.table-dark-custom{
+    width:100%;
+    border-collapse:collapse;
+}
+.table-dark-custom th{
+    font-size:12px;
+    color:#aaa;
+    padding:14px;
+    border-bottom:1px solid #222;
+}
+.table-dark-custom td{
+    padding:18px 14px;
+    border-bottom:1px solid #1a1a1a;
+}
+
+/* ===== CATALOG PAGE ===== */
+.style-card{
+    position:relative;
+    overflow:hidden;
+    border-radius:12px;
+}
+
+.style-card img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+    filter:brightness(0.7);
+}
+
+.style-overlay{
+    position:absolute;
+    bottom:0;
+    padding:20px;
+    color:white;
+}
+
+.upload-card{
+    height:260px;
+    border:2px dashed #444;
+    border-radius:12px;
+    color:#aaa;
+}
+
+/* ===== FORM ===== */
+.form-control{
+    background:#111 !important;
+    border:1px solid #333 !important;
+    color:#fff !important;
+}
+.form-control:focus{
+    background:#111;
+    color:#fff;
+    border-color:#ffc107;
+    box-shadow:none;
+}
