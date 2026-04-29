@@ -12,6 +12,7 @@ Route::get('/register', function () {
 })->name('register');
 
 Route::post('/register', function (Request $request) {
+
     $request->validate([
         'username' => 'required',
         'nama_lengkap' => 'required',
@@ -24,21 +25,25 @@ Route::post('/register', function (Request $request) {
         'username' => $request->username,
         'email' => $request->email,
         'password' => Hash::make($request->password),
+        'role' => 'user',
     ]);
 
     return redirect()->route('login');
 })->name('register.submit');
 
-/* ================= LOGIN ================= */
+
+/* ================= LOGIN USER ================= */
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
 Route::post('/login', function (Request $request) {
+
     $credentials = $request->only('email', 'password');
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
+
         return redirect()->route('profil');
     }
 
@@ -47,51 +52,70 @@ Route::post('/login', function (Request $request) {
     ]);
 })->name('login.submit');
 
+
 /* ================= HOME ================= */
 Route::get('/', function () {
     return view('pages.home');
 });
+Route::get('/daftar-barbershop', function () {
+    return view('pages.daftar-barbershop');
+})->name('daftar.barbershop');
+
 
 /* ================= ADMIN ================= */
 Route::prefix('admin')->group(function () {
 
+    /* LOGIN ADMIN */
     Route::get('/login', function () {
         return view('admin.login');
     })->name('admin.login');
 
+    /* DASHBOARD */
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 
+    /* BOOKING */
     Route::get('/bookings', function () {
         return view('admin.bookings');
     })->name('admin.bookings');
 
+    // ✅ FIX: ini sebelumnya salah route (double /admin)
+    Route::get('/bookings/{id}', function ($id) {
+        return view('admin.bookings-show', compact('id'));
+    })->name('admin.bookings.show');
+
+    /* USERS */
     Route::get('/users', function () {
         return view('admin.users');
     })->name('admin.users');
 
+    /* REPORTS */
     Route::get('/reports', function () {
         return view('admin.reports');
     })->name('admin.reports');
 
+    /* FINANCE */
     Route::get('/finance', function () {
         return view('admin.finance');
     })->name('admin.finance');
 
+    /* CATALOG */
     Route::get('/catalog', function () {
         return view('admin.catalog');
     })->name('admin.catalog');
 
+    /* PRODUCTS */
     Route::get('/products', function () {
         return view('admin.products');
     })->name('admin.products');
 
+    /* ATTENDANCE */
     Route::get('/attendance', function () {
         return view('admin.attendance');
     })->name('admin.attendance');
-
 });
+
 
 /* ================= KASIR ================= */
 Route::prefix('kasir')->group(function () {
@@ -109,6 +133,7 @@ Route::prefix('kasir')->group(function () {
     })->name('kasir.products');
 
 });
+
 
 /* ================= USER ================= */
 Route::view('/dashboard', 'user.dashboard');
@@ -130,6 +155,7 @@ Route::post('/profil/update', function () {
 })->name('profil.update');
 
 Route::view('/detail-booking', 'user.detail-booking');
+
 
 /* ================= LOGOUT ================= */
 Route::post('/logout', function () {
