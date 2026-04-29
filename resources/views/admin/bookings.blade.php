@@ -1,192 +1,227 @@
 @extends('layouts.admin')
-@section('title','Bookings')
+@section('title','Manajemen Booking')
 
 @section('content')
 
-{{-- HEADER PAGE (judul kiri + tombol kanan) --}}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <div class="section-label">OPERATIONS MODULE</div>
-        <div class="page-title">Manajemen Booking Offline</div>
-        <p class="small-text">
-            Kelola antrean pelanggan walk-in dan reservasi offline melalui pusat kendali digital.
-        </p>
+<style>
+body {
+    background: #0b0b0b;
+    color: #fff;
+}
+
+/* CARD */
+.card {
+    background: linear-gradient(145deg,#1a1a1a,#111);
+    border: 1px solid #1f1f1f;
+    color: #fff;
+}
+
+/* FORM */
+.form-control, .form-select {
+    background: #0d0d0d;
+    border: 1px solid #222;
+    color: #fff;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #ffc107;
+    box-shadow: none;
+}
+
+/* TABLE */
+.table-dark-gold {
+    width: 100%;
+    color: #fff;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* HEADER */
+.table-dark-gold thead {
+    background: #111;
+    border-bottom: 2px solid #ffc107;
+}
+
+.table-dark-gold thead th {
+    color: #ffc107;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 14px;
+}
+
+/* ROW */
+.table-dark-gold tbody tr {
+    border-bottom: 1px solid #1f1f1f;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.table-dark-gold tbody tr:hover {
+    background: #151515;
+    transform: scale(1.01);
+}
+
+/* CELL */
+.table-dark-gold tbody td {
+    padding: 16px 14px;
+    color: #e4e6eb;
+}
+
+/* BADGE */
+.badge.bg-warning { background:#ffc107 !important; color:#111; }
+.badge.bg-success { background:#1dd1a1 !important; }
+.badge.bg-danger { background:#e74c3c !important; }
+.badge.bg-primary { background:#3498db !important; }
+
+/* REMOVE BOOTSTRAP OVERLAY */
+.table {
+    --bs-table-bg: transparent;
+}
+</style>
+
+<div class="container-fluid">
+
+    <div class="mb-4">
+        <h3 style="color:#ffc107;">Manajemen Booking</h3>
+        <p style="color:#aaa;">Semua data booking</p>
     </div>
 
-    <button class="btn btn-warning"
-            data-bs-toggle="modal"
-            data-bs-target="#bookingModal">
-        + NEW BOOKING
-    </button>
-</div>
+    {{-- FILTER --}}
+    <div class="card p-4 mb-4">
+        <div class="row g-3">
 
-<div class="row">
-    {{-- LEFT CONTENT --}}
-    <div class="col-md-9">
-
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card-dark">
-                    <div class="small-text">TOTAL HARI INI</div>
-                    <h2>42</h2>
-                </div>
+            <div class="col-md-3">
+                <label class="form-label">Dari</label>
+                <input type="date" id="filterFromDate" class="form-control">
             </div>
 
-            <div class="col-md-4">
-                <div class="card-dark">
-                    <div class="small-text">DALAM ANTREAN</div>
-                    <h2 class="yellow">08</h2>
-                </div>
+            <div class="col-md-3">
+                <label class="form-label">Sampai</label>
+                <input type="date" id="filterToDate" class="form-control">
             </div>
 
-            <div class="col-md-4">
-                <div class="card-dark">
-                    <div class="small-text">SELESAI</div>
-                    <h2>31</h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-dark mb-3">
-            <input id="searchCustomer" class="search-box" placeholder="Cari pelanggan...">
-        </div>
-
-        <div class="card-dark">
-            <table class="table-dark-custom">
-                <thead>
-                    <tr>
-                        <th>CUSTOMER NAME</th>
-                        <th>SERVICE</th>
-                        <th>TIME</th>
-                        <th>STATUS</th>
-                    </tr>
-                </thead>
-                <tbody id="bookingTable">>
-                    <tr>
-                        <td class="customerName">ADRIAN WIJAYA</td>
-                        <td>Luxury Cut & Shave</td>
-                        <td>14:30 WIB</td>
-                        <td class="badge-status status-progress">IN PROGRESS</td>
-                    </tr>
-                    <tr>
-                        <td class="customerName">BAMBANG SURYO</td>
-                        <td>Beard Trimming</td>
-                        <td>15:15 WIB</td>
-                        <td class="badge-status status-waiting">WAITING</td>
-                    </tr>
-                    <tr>
-                        <td class="customerName">DENNY CAKMAN</td>
-                        <td>Hair Coloring</td>
-                        <td>16:00 WIB</td>
-                        <td class="badge-status status-confirm">CONFIRMED</td>
-                    </tr>
-                    <tr>
-                        <td class="customerName">RAFFI AHMAD</td>
-                        <td>Signature Cut</td>
-                        <td>16:45 WIB</td>
-                        <td class="badge-status status-waiting">WAITING</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card-dark mt-4">
-            <div class="yellow">[ SYSTEM LOG ]</div>
-            <div class="small-text mt-2">
-                > FETCHING LATEST OFFLINE DATABASE... <br>
-                > SYNCING WITH CLOUD SERVERS ( SUCCESS ) <br>
-                > LISTENING FOR NEW LOCAL INPUT ON PORT 4080
-            </div>
-        </div>
-
-    </div>
-
-    {{-- RIGHT PANEL --}}
-    <div class="col-md-3">
-
-        <div class="right-panel mb-4">
-            <div class="section-label">URGENT ACTIONS</div>
-            <p class="small-text">Booking OFF-0938 was cancelled</p>
-            <button class="btn btn-sm btn-outline-warning">CONFIRM</button>
-        </div>
-
-        <div class="right-panel">
-            <div class="section-label">SERVICE QUEUE</div>
-
-            <div class="small-text">Haircut Section 85%</div>
-            <div class="progress mb-3">
-                <div class="progress-bar bg-warning" style="width:85%"></div>
-            </div>
-
-            <div class="small-text">Wash & Style 40%</div>
-            <div class="progress">
-                <div class="progress-bar bg-warning" style="width:40%"></div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-{{-- MODAL NEW BOOKING --}}
-<div class="modal fade" id="bookingModal">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark text-light">
-
-      <div class="modal-header border-secondary">
-        <h5 class="modal-title">Tambah Booking Baru</h5>
-        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <form>
-            <div class="mb-3">
-                <label class="mb-1">Nama Customer</label>
-                <input type="text" class="form-control" placeholder="Masukkan nama">
-            </div>
-
-            <div class="mb-3">
-                <label class="mb-1">Pilih Service</label>
-                <select class="form-control">
-                    <option>Luxury Cut & Shave</option>
-                    <option>Signature Cut</option>
-                    <option>Hair Coloring</option>
-                    <option>Beard Trimming</option>
-                    <option>Hair Wash & Style</option>
+            <div class="col-md-3">
+                <label class="form-label">Barbershop</label>
+                <select id="filterShop" class="form-control">
+                    <option value="">Semua</option>
+                    <option>BarberKing</option>
+                    <option>Gentleman Cut</option>
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label class="mb-1">Pilih Jam</label>
-                <input type="time" class="form-control">
+            <div class="col-md-3">
+                <label class="form-label">Status</label>
+                <select id="filterStatus" class="form-control">
+                    <option value="">Semua</option>
+                    <option value="pending">Pending</option>
+                    <option value="diterima">Diterima</option>
+                    <option value="ditolak">Ditolak</option>
+                    <option value="selesai">Selesai</option>
+                </select>
             </div>
-        </form>
-      </div>
 
-      <div class="modal-footer border-secondary">
-        <button class="btn btn-outline-light" data-bs-dismiss="modal">Batal</button>
-        <button class="btn btn-warning">Simpan Booking</button>
-      </div>
+            <div class="col-md-12">
+                <label class="form-label">Cari Customer</label>
+                <input id="searchCustomer" class="form-control" placeholder="Cari nama customer...">
+            </div>
+
+        </div>
+    </div>
+
+    {{-- TABLE --}}
+    <div class="card p-3">
+
+        <table class="table table-dark-gold">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Barbershop</th>
+                    <th>Tanggal</th>
+                    <th>Jam</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="bookingTable">
+
+                @foreach([
+                    ['id'=>1,'name'=>'Adrian Wijaya','shop'=>'BarberKing','date'=>'2026-04-29','time'=>'14:30','status'=>'pending'],
+                    ['id'=>2,'name'=>'Bambang','shop'=>'Gentleman Cut','date'=>'2026-04-29','time'=>'15:00','status'=>'diterima'],
+                    ['id'=>3,'name'=>'Andree','shop'=>'BarberKing','date'=>'2026-04-30','time'=>'16:00','status'=>'ditolak'],
+                    ['id'=>4,'name'=>'Raffi','shop'=>'Gentleman Cut','date'=>'2026-04-30','time'=>'17:00','status'=>'selesai'],
+                ] as $b)
+
+                <tr 
+                    data-date="{{ $b['date'] }}"
+                    data-shop="{{ $b['shop'] }}"
+                    data-status="{{ $b['status'] }}"
+                    onclick="window.location='{{ route('admin.bookings.show', $b['id']) }}'"
+                >
+                    <td class="customerName">{{ $b['name'] }}</td>
+                    <td>{{ $b['shop'] }}</td>
+                    <td>{{ $b['date'] }}</td>
+                    <td>{{ $b['time'] }}</td>
+                    <td>
+                        <span class="badge bg-{{ 
+                            $b['status']=='pending' ? 'warning' : 
+                            ($b['status']=='diterima' ? 'success' : 
+                            ($b['status']=='ditolak' ? 'danger' : 'primary')) 
+                        }}">
+                            {{ ucfirst($b['status']) }}
+                        </span>
+                    </td>
+                </tr>
+
+                @endforeach
+
+            </tbody>
+        </table>
 
     </div>
-  </div>
 </div>
 
-    <script>
-document.getElementById("searchCustomer").addEventListener("keyup", function() {
-    let keyword = this.value.toLowerCase();
-    let rows = document.querySelectorAll("#bookingTable tr");
+{{-- SCRIPT --}}
+<script>
+const searchInput = document.getElementById("searchCustomer");
+const fromDate = document.getElementById("filterFromDate");
+const toDate = document.getElementById("filterToDate");
+const filterShop = document.getElementById("filterShop");
+const filterStatus = document.getElementById("filterStatus");
+
+const rows = document.querySelectorAll("#bookingTable tr");
+
+function filterData() {
+
+    let keyword = searchInput.value.toLowerCase();
+    let from = fromDate.value;
+    let to = toDate.value;
+    let shop = filterShop.value;
+    let status = filterStatus.value;
 
     rows.forEach(row => {
-        let customer = row.querySelector(".customerName").innerText.toLowerCase();
 
-        if(customer.includes(keyword)){
-            row.style.display = "";
-        } else {
-            row.style.display = "none";
-        }
+        let name = row.querySelector(".customerName").innerText.toLowerCase();
+        let date = row.dataset.date;
+        let rowShop = row.dataset.shop;
+        let rowStatus = row.dataset.status;
+
+        let match =
+            name.includes(keyword) &&
+            (!from || date >= from) &&
+            (!to || date <= to) &&
+            (!shop || rowShop === shop) &&
+            (!status || rowStatus === status);
+
+        row.style.display = match ? "" : "none";
     });
-});
+}
+
+searchInput.addEventListener("keyup", filterData);
+fromDate.addEventListener("change", filterData);
+toDate.addEventListener("change", filterData);
+filterShop.addEventListener("change", filterData);
+filterStatus.addEventListener("change", filterData);
 </script>
 
 @endsection
