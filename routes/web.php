@@ -35,9 +35,13 @@ Route::prefix('admin')->group(function () {
         return view('admin.finance');
     })->name('admin.finance');
 
-    Route::get('/catalog', function () {
-        return view('admin.catalog');
-    })->name('admin.catalog');
+    Route::get('/barber', function () {
+        return view('admin.barber');
+    })->name('admin.barber');
+
+    Route::get('/admin/barber/{id}', function ($id) {
+    return view('admin.barber-detail');
+    })->name('admin.barber.detail');
 
     Route::get('/products', function () {
         return view('admin.products');

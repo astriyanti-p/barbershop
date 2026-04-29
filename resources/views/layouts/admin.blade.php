@@ -147,9 +147,9 @@ body{
     class="menu-item {{ Request::is('admin/finance') ? 'menu-active' : '' }}">
    Finance
     </a>
-    <a href="{{ url('/admin/catalog') }}"
-    class="menu-item {{ Request::is('admin/catalog') ? 'menu-active' : '' }}">
-   Katalog
+    <a href="{{ url('/admin/barber') }}"
+    class="menu-item {{ Request::is('admin/barber') ? 'menu-active' : '' }}">
+   Manajemen Barbershop
     </a>
     <a href="{{ url('/admin/products') }}"
     class="menu-item {{ Request::is('admin/products') ? 'menu-active' : '' }}">
