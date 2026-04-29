@@ -100,6 +100,15 @@ Route::prefix('admin')->group(function () {
         return view('admin.finance');
     })->name('admin.finance');
 
+    /* BARBER */
+    Route::get('/barber', function () {
+        return view('admin.barber');
+    })->name('admin.barber');
+
+    Route::get('/barber/{id}', function ($id) {
+        return view('admin.barber-detail');
+    })->name('admin.barber.detail');
+
     /* CATALOG */
     Route::get('/catalog', function () {
         return view('admin.catalog');
