@@ -10,7 +10,7 @@
     </div>
 
     <div class="d-flex gap-3">
-        <input class="form-control" style="width:260px" placeholder="Cari barbershop...">
+        <input id="searchBarber" class="form-control" style="width:260px" placeholder="Cari barbershop...">
         <button class="btn btn-warning">+ Tambah Barbershop</button>
     </div>
 </div>
@@ -49,7 +49,7 @@
     Detail
 </a>
 
-<button class="btn btn-secondary btn-sm">Edit</button>
+<a href="{{ route('admin.barber.edit',1) }}" class="btn btn-secondary btn-sm">Edit</a>
 <button class="btn btn-outline-light btn-sm">Hapus</button>
 </td>
 </tr>
@@ -68,7 +68,8 @@
 <a href="{{ route('admin.barber.detail',2) }}" class="btn btn-info btn-sm">
     Detail
 </a>
-<button class="btn btn-secondary btn-sm">Edit</button>
+<a href="{{ route('admin.barber.edit',2) }}" class="btn btn-secondary btn-sm">Edit
+</a>
 <button class="btn btn-outline-light btn-sm">Hapus</button>
 </td>
 </tr>
@@ -87,7 +88,7 @@
 <a href="{{ route('admin.barber.detail',3) }}" class="btn btn-info btn-sm">
     Detail
 </a>
-<button class="btn btn-secondary btn-sm">Edit</button>
+<a href="{{ route('admin.barber.edit',3) }}" class="btn btn-secondary btn-sm">Edit  </a>
 <button class="btn btn-outline-light btn-sm">Hapus</button>
 </td>
 </tr>
@@ -119,6 +120,31 @@ document.querySelectorAll(".reject-btn").forEach(btn => {
         row.querySelector(".approve-btn").remove()
     })
 })
+// ================= SEARCH FILTER =================
+document.getElementById("searchBarber").addEventListener("keyup", function () {
+
+    let keyword = this.value.toLowerCase();
+    let rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+
+        let nama = row.cells[1].innerText.toLowerCase();
+        let owner = row.cells[2].innerText.toLowerCase();
+        let alamat = row.cells[3].innerText.toLowerCase();
+
+        if (
+            nama.includes(keyword) ||
+            owner.includes(keyword) ||
+            alamat.includes(keyword)
+        ) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+
+    });
+
+});
 </script>
 
 @endsection
