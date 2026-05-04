@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminUserController;
 
 /* ================= HOME ================= */
 Route::get('/', function () {
@@ -23,9 +24,26 @@ Route::prefix('admin')->group(function () {
         return view('admin.bookings');
     })->name('admin.bookings');
 
-    Route::get('/users', function () {
-        return view('admin.users');
-    })->name('admin.users');
+    // ✅ USERS SEKARANG PAKAI CONTROLLER (INI YANG BENAR)
+    Route::get('/users', [AdminUserController::class,'index'])
+        ->name('admin.users');
+
+    Route::get('/users/create', [AdminUserController::class,'create'])
+    ->name('admin.users.create');
+
+    Route::post('/users/store', [App\Http\Controllers\AdminUserController::class,'store'])
+    ->name('admin.users.store');
+
+    // EDIT USER
+Route::get('/users/edit/{id}', [AdminUserController::class,'edit'])
+    ->name('admin.users.edit');
+
+Route::post('/users/update/{id}', [AdminUserController::class,'update'])
+    ->name('admin.users.update');
+
+// DELETE USER
+Route::get('/users/delete/{id}', [AdminUserController::class,'delete'])
+    ->name('admin.users.delete');
 
     Route::get('/reports', function () {
         return view('admin.reports');
@@ -39,8 +57,8 @@ Route::prefix('admin')->group(function () {
         return view('admin.barber');
     })->name('admin.barber');
 
-    Route::get('/admin/barber/{id}', function ($id) {
-    return view('admin.barber-detail');
+    Route::get('/barber/{id}', function ($id) {
+        return view('admin.barber-detail');
     })->name('admin.barber.detail');
 
     Route::get('/products', function () {
