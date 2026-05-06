@@ -6,11 +6,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BarberRegisterController;
+use App\Http\Controllers\Admin\DataPengunjungController;
 
 /* ================= REGISTER ================= */
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
+
+Route::post('/register-barber', [BarberRegisterController::class, 'store']);
 
 Route::post('/register', function (Request $request) {
 
@@ -91,9 +95,9 @@ Route::get('/daftar-barbershop', function () {
             return view('admin.reports');
         })->name('admin.reports');
         
-        Route::get('/finance', function () {
-            return view('admin.finance');
-        })->name('admin.finance');
+        Route::get('/data-pengunjung', function () {
+            return view('admin.data-pengunjung');
+        })->name('admin.data-pengunjung');
         
         Route::get('/barber', function () {
             return view('admin.barber');
@@ -117,8 +121,10 @@ Route::get('/daftar-barbershop', function () {
         Route::get('/attendance', function () {
             return view('admin.attendance');
         })->name('admin.attendance');
+        Route::get('/data-pengunjung', [DataPengunjungController::class, 'index'])
+        ->name('admin.data-pengunjung');
+});
         
-    });
 });
 
 
@@ -224,7 +230,3 @@ Route::view('/detail-booking', 'user.detail-booking');
 
 
 /* ================= LOGOUT ================= */
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/');
-})->name('logout');

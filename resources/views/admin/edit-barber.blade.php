@@ -112,7 +112,6 @@
 
 <div class="d-flex justify-content-between align-items-center">
 <h4 class="yellow">Service (Max 5)</h4>
-<button class="btn btn-warning btn-sm" onclick="addService()">+ Tambah Service</button>
 </div>
 
 <table class="table table-dark table-borderless mt-3">

@@ -41,7 +41,7 @@
 
 {{-- TOTAL --}}
 <div class="card-dark p-3 mb-3">
-    <h4>Total Pengunjung: <span id="totalVisitor">0</span> Orang</h4>
+    <h4>Total Pengunjung: <span id="totalVisitors">{{ $totalVisitors }}</span> Orang</h4>
 </div>
 
 {{-- FILTER --}}
@@ -51,10 +51,13 @@
         <div class="col-md-4">
             <label class="text-secondary">Pilih Barbershop</label>
             <select id="filterShop" class="search-box w-100">
-                <option value="">Semua Barbershop</option>
-                <option value="barber1">Barberkin</option>
-                <option value="barber2">Barbersip</option>
-            </select>
+    <option value="">Semua Barbershop</option>
+    @foreach($barbers as $b)
+        <option value="{{ $b->id }}">
+            {{ $b->name }}
+        </option>
+    @endforeach
+</select>
         </div>
 
         <div class="col-md-4">
@@ -86,40 +89,26 @@
         </thead>
 
         <tbody id="paymentTable">
-
-            <tr data-date="2026-04-29" data-status="berhasil" data-shop="barber1">
-                <td>Adrian</td>
-                <td>Potong Rambut</td>
-                <td>Barberkin</td>
-                <td>2026-04-29</td>
-                <td><span class="badge bg-success">Berhasil</span></td>
-            </tr>
-
-            <tr data-date="2026-04-29" data-status="pending" data-shop="barber1">
-                <td>Bambang</td>
-                <td>Cukur + Keramas</td>
-                <td>Barberkin</td>
-                <td>2026-04-29</td>
-                <td><span class="badge bg-warning text-dark">Pending</span></td>
-            </tr>
-
-            <tr data-date="2026-04-30" data-status="berhasil" data-shop="barber2">
-                <td>Raffi</td>
-                <td>Hair Styling</td>
-                <td>Barbersip</td>
-                <td>2026-04-30</td>
-                <td><span class="badge bg-success">Berhasil</span></td>
-            </tr>
-
-            <tr data-date="2026-04-30" data-status="gagal" data-shop="barber2">
-                <td>Andree</td>
-                <td>Potong Rambut</td>
-                <td>Barbersip</td>
-                <td>2026-04-30</td>
-                <td><span class="badge bg-danger">Gagal</span></td>
-            </tr>
-
-        </tbody>
+@foreach($visitors as $v)
+<tr 
+    data-date="{{ $v->booking_date }}" 
+    data-status="{{ $v->payment_status }}" 
+    data-shop="{{ $v->barber_id }}"
+>
+    <td>{{ $v->customer->name ?? '-' }}</td>
+    <td>{{ $v->order_type }}</td>
+    <td>{{ $v->barber->name ?? '-' }}</td>
+    <td>{{ $v->booking_date }}</td>
+    <td>
+        @if($v->payment_status == 'paid')
+            <span class="badge bg-success">Berhasil</span>
+        @else
+            <span class="badge bg-warning">Pending</span>
+        @endif
+    </td>
+</tr>
+@endforeach
+</tbody>
     </table>
 
 </div>
@@ -129,9 +118,9 @@ const shop = document.getElementById("filterShop");
 const fromDate = document.getElementById("filterFromDate");
 const toDate = document.getElementById("filterToDate");
 
-const rows = document.querySelectorAll("#paymentTable tr");
-
 function filterData() {
+
+    const rows = document.querySelectorAll("#paymentTable tr");
 
     let shopVal = shop.value;
     let from = fromDate.value;
@@ -156,21 +145,21 @@ function filterData() {
 
         row.style.display = match ? "" : "none";
 
-        // hitung hanya berhasil
-        if (match && status === "berhasil") {
+        if (match && status === "paid") {
             total++;
         }
 
     });
 
-    document.getElementById("totalVisitor").innerText = total;
+    document.getElementById("totalVisitors").innerText = total;
 }
 
+// event
 shop.addEventListener("change", filterData);
 fromDate.addEventListener("change", filterData);
 toDate.addEventListener("change", filterData);
 
+// run pertama
 filterData();
 </script>
-
 @endsection

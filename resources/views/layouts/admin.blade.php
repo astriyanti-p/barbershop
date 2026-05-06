@@ -143,9 +143,9 @@ body{
     class="menu-item {{ Request::is('admin/reports') ? 'menu-active' : '' }}">
    Report
     </a>
-    <a href="{{ url('/admin/finance') }}"
-    class="menu-item {{ Request::is('admin/finance') ? 'menu-active' : '' }}">
-   Finance
+    <a href="{{ url('/admin/data pengunjung') }}"
+    class="menu-item {{ Request::is('admin/data pengunjung') ? 'menu-active' : '' }}">
+   Data Pengunjung
     </a>
     <a href="{{ url('/admin/barber') }}"
     class="menu-item {{ Request::is('admin/barber') ? 'menu-active' : '' }}">
@@ -159,6 +159,15 @@ body{
     class="menu-item {{ Request::is('admin/attendance') ? 'menu-active' : '' }}">
    Presensi Staff
     </a>
+    <!-- logout -->
+    <div style="position:absolute; bottom:20px; width:100%; padding:0 20px;">
+        <form action="{{ route('admin.logout') }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-danger w-100">
+        ⏻ Logout
+    </button>
+</form>
+    </div>
 </div>
 
 @endif

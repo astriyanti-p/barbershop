@@ -1,63 +1,94 @@
 @extends('layouts.app')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    Swal.fire({
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 
 <section class="form-section">
     <div class="container">
 
         <div class="form-card mx-auto">
 
-            <h2 class="text-center text-warning mb-3">
-                Daftarkan Barbershop Anda
-            </h2>
+              <h2 class="text-center text-warning mb-3">
+        Daftarkan Barbershop Anda
+    </h2>
 
-            <p class="text-center text-secondary mb-4">
-                Isi data di bawah ini, tim kami akan melakukan verifikasi terlebih dahulu.
-            </p>
+    <p class="text-center text-secondary mb-4">
+        Isi data di bawah ini, tim kami akan melakukan verifikasi terlebih dahulu.
+    </p>
 
-            <form method="POST" action="#" enctype="multipart/form-data">
+    <!-- 🔥 INI TEMPAT ERROR VALIDASI -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="/register-barber" enctype="multipart/form-data">
                 @csrf
 
                 <!-- NAMA -->
                 <div class="mb-3">
                     <label class="form-label">Nama Barbershop</label>
-                    <input type="text" class="form-control" name="nama" required>
+                    <input type="text" class="form-control" name="nama" value="{{ old('nama') }}" required>
                 </div>
 
                 <!-- PEMILIK -->
                 <div class="mb-3">
                     <label class="form-label">Nama Pemilik</label>
-                    <input type="text" class="form-control" name="pemilik" required>
+                    <input type="text" class="form-control" name="pemilik" value="{{ old('pemilik') }}" required>
                 </div>
+
+                <!-- USERNAME -->
+<div class="mb-3">
+    <label class="form-label">Username</label>
+    <input type="text" class="form-control" name="username" value="{{ old('username') }}" required>
+</div>
 
                 <!-- EMAIL -->
                 <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" required>
+                <input type="email" class="form-control" name="email" value="{{ old('email') }}" required>
                 </div>
 
                 <!-- PASSWORD -->
                 <div class="mb-3">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" required>
+                <input type="password" name="password" class="form-control">
                 </div>
 
                 <!-- KONFIRMASI PASSWORD -->
                 <div class="mb-3">
                 <label class="form-label">Konfirmasi Password</label>
-                <input type="password" class="form-control" name="password_confirmation" required>
+                <input type="password" name="password_confirmation" class="form-control">
                 </div>
 
                 <!-- NO HP -->
                 <div class="mb-3">
                     <label class="form-label">No HP</label>
-                    <input type="text" class="form-control" name="no_hp" required>
+                    <input type="text" class="form-control" name="no_hp" value="{{ old('no_hp') }}" required>
                 </div>
 
                 <!-- DESKRIPSI -->
                 <div class="mb-3">
                     <label class="form-label">Deskripsi</label>
-                    <textarea class="form-control" name="deskripsi" rows="3"></textarea>
+                    <textarea class="form-control" name="deskripsi" rows="3">{{ old('deskripsi') }}</textarea>
                 </div>
 
                 <!-- FOTO -->
@@ -78,19 +109,19 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Latitude</label>
-                        <input type="text" class="form-control" name="latitude" id="latitude" required>
+                        <input type="text" class="form-control" name="latitude" id="latitude" value="{{ old('latitude') }}" required>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Longitude</label>
-                        <input type="text" class="form-control" name="longitude" id="longitude" required>
+                        <input type="text" class="form-control" name="longitude" id="longitude" value="{{ old('longitude') }}" required>
                     </div>
                 </div>
 
                 <!-- ALAMAT AUTO -->
                 <div class="mb-3">
                     <label class="form-label">Alamat</label>
-                    <textarea class="form-control" name="alamat" id="alamat" rows="3" required></textarea>
+                    <textarea class="form-control" name="alamat" id="alamat" rows="3" required>{{ old('alamat') }}</textarea>
                 </div>
 
                 <!-- SUBMIT -->
