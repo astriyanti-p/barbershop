@@ -45,4 +45,8 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+    public function service()
+{
+    return $this->belongsTo(\App\Models\Service::class, 'service_id');
+}
 }

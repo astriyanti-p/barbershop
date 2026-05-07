@@ -1,66 +1,94 @@
 @extends('layouts.app')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('success'))
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    Swal.fire({
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+});
+</script>
+@endif
 
 <section class="form-section">
     <div class="container">
 
         <div class="form-card mx-auto">
 
-            <h2 class="text-center text-warning mb-3">
-                Daftarkan Barbershop Anda
-            </h2>
+              <h2 class="text-center text-warning mb-3">
+        Daftarkan Barbershop Anda
+    </h2>
 
-            <p class="text-center text-secondary mb-4">
-                Isi data di bawah ini, tim kami akan melakukan verifikasi terlebih dahulu.
-            </p>
+    <p class="text-center text-secondary mb-4">
+        Isi data di bawah ini, tim kami akan melakukan verifikasi terlebih dahulu.
+    </p>
 
-            <form method="POST" action="#">
+    <!-- 🔥 INI TEMPAT ERROR VALIDASI -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="/register-barber" enctype="multipart/form-data">
                 @csrf
 
                 <!-- NAMA -->
                 <div class="mb-3">
                     <label class="form-label">Nama Barbershop</label>
-                    <input type="text" class="form-control" name="nama" required>
+                    <input type="text" class="form-control" name="nama" value="{{ old('nama') }}" required>
                 </div>
 
                 <!-- PEMILIK -->
                 <div class="mb-3">
                     <label class="form-label">Nama Pemilik</label>
-                    <input type="text" class="form-control" name="pemilik" required>
+                    <input type="text" class="form-control" name="pemilik" value="{{ old('pemilik') }}" required>
+                </div>
+
+                <!-- USERNAME -->
+<div class="mb-3">
+    <label class="form-label">Username</label>
+    <input type="text" class="form-control" name="username" value="{{ old('username') }}" required>
+</div>
+
+                <!-- EMAIL -->
+                <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control">
+                </div>
+
+                <!-- KONFIRMASI PASSWORD -->
+                <div class="mb-3">
+                <label class="form-label">Konfirmasi Password</label>
+                <input type="password" name="password_confirmation" class="form-control">
                 </div>
 
                 <!-- NO HP -->
                 <div class="mb-3">
                     <label class="form-label">No HP</label>
-                    <input type="text" class="form-control" name="no_hp" required>
-                </div>
-
-                <!-- ALAMAT -->
-                <div class="mb-3">
-                    <label class="form-label">Alamat</label>
-                    <textarea class="form-control" name="alamat" rows="3" required></textarea>
-                </div>
-
-                <!-- KOTA -->
-                <div class="mb-3">
-                    <label class="form-label">Kota</label>
-                    <input type="text" class="form-control" name="kota" required>
-                </div>
-
-                <!-- JAM -->
-                <div class="mb-3">
-                    <label class="form-label">Jam Operasional</label>
-                    <div class="d-flex gap-2">
-                        <input type="time" class="form-control" name="buka" required>
-                        <input type="time" class="form-control" name="tutup" required>
-                    </div>
+                    <input type="text" class="form-control" name="no_hp" value="{{ old('no_hp') }}" required>
                 </div>
 
                 <!-- DESKRIPSI -->
                 <div class="mb-3">
                     <label class="form-label">Deskripsi</label>
-                    <textarea class="form-control" name="deskripsi" rows="3"></textarea>
+                    <textarea class="form-control" name="deskripsi" rows="3">{{ old('deskripsi') }}</textarea>
                 </div>
 
                 <!-- FOTO -->
@@ -79,17 +107,21 @@
 
                 <!-- LAT LNG -->
                 <div class="row mb-3">
-
                     <div class="col-md-6">
                         <label class="form-label">Latitude</label>
-                        <input type="text" class="form-control" name="latitude" id="latitude" required>
+                        <input type="text" class="form-control" name="latitude" id="latitude" value="{{ old('latitude') }}" required>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Longitude</label>
-                        <input type="text" class="form-control" name="longitude" id="longitude" required>
+                        <input type="text" class="form-control" name="longitude" id="longitude" value="{{ old('longitude') }}" required>
                     </div>
+                </div>
 
+                <!-- ALAMAT AUTO -->
+                <div class="mb-3">
+                    <label class="form-label">Alamat</label>
+                    <textarea class="form-control" name="alamat" id="alamat" rows="3" required>{{ old('alamat') }}</textarea>
                 </div>
 
                 <!-- SUBMIT -->
@@ -103,7 +135,6 @@
     </div>
 </section>
 
-<!-- STYLE -->
 <style>
 body {
     background:#0d0d0d;
@@ -120,11 +151,6 @@ body {
     padding:30px;
     border-radius:16px;
     border:1px solid rgba(255,255,255,0.08);
-    transition:0.3s;
-}
-
-.form-card:hover {
-    transform:translateY(-5px);
 }
 
 .form-control {
@@ -145,7 +171,6 @@ label { color:#ccc; }
 }
 </style>
 
-<!-- SCRIPT GEO -->
 <script>
 function getLocation() {
 
@@ -159,10 +184,31 @@ function getLocation() {
     navigator.geolocation.getCurrentPosition(
         function(position) {
 
-            document.getElementById("latitude").value = position.coords.latitude;
-            document.getElementById("longitude").value = position.coords.longitude;
+            let lat = position.coords.latitude;
+            let lng = position.coords.longitude;
 
-            showMessage("Lokasi berhasil diambil ✔");
+            document.getElementById("latitude").value = lat;
+            document.getElementById("longitude").value = lng;
+
+            showMessage("Mengambil alamat...");
+
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data && data.display_name) {
+                        document.getElementById("alamat").value = data.display_name;
+                        showMessage("Lokasi & alamat berhasil ✔");
+                    } else {
+                        showMessage("Alamat tidak ditemukan");
+                    }
+
+                })
+                .catch(err => {
+                    console.error(err);
+                    showMessage("Gagal mengambil alamat");
+                });
+
         },
         function(error) {
 
@@ -193,22 +239,7 @@ function getLocation() {
 }
 
 function showMessage(text) {
-    let box = document.getElementById("geo-msg");
-
-    if (!box) {
-        box = document.createElement("div");
-        box.id = "geo-msg";
-        box.style.cssText = `
-            background:#222;
-            color:#d4a017;
-            padding:10px;
-            border-radius:10px;
-            border:1px solid #333;
-        `;
-        document.querySelector(".form-card").prepend(box);
-    }
-
-    box.innerText = text;
+    document.getElementById("geo-msg").innerText = text;
 }
 </script>
 

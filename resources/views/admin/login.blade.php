@@ -130,56 +130,44 @@ body {
         </div>
 
         <!-- FORM -->
-        <form onsubmit="loginSystem(event)">
+<form method="POST" action="{{ route('admin.login.submit') }}">
+    @csrf
 
-            <div class="mb-3 text-start">
-                <label class="small-text">Username</label>
-                <input id="username" type="text" class="form-control" placeholder="Masukkan username">
-            </div>
+    @if ($errors->any())
+        <div class="alert alert-danger" style="background: rgba(255,0,0,0.2); border: 1px solid red; color: red; padding: 10px; border-radius: 10px; margin-bottom: 15px;">
+            {{ $errors->first('login') }}
+        </div>
+    @endif
 
-            <div class="mb-3 text-start">
-                <label class="small-text">Password</label>
-                <input id="password" type="password" class="form-control" placeholder="Masukkan password">
-            </div>
+    <div class="mb-3 text-start">
+        <label class="small-text">Username / Email</label>
+        <input name="login" type="text" class="form-control" 
+               placeholder="Masukkan username atau email" 
+               value="{{ old('login') }}" required>
+    </div>
 
-            <div class="d-flex justify-content-between small-text mb-4">
-                <div><input type="checkbox"> Ingat</div>
-                <div>v2.0</div>
-            </div>
+    <div class="mb-3 text-start">
+        <label class="small-text">Password</label>
+        <input name="password" type="password" class="form-control" 
+               placeholder="Masukkan password" required>
+    </div>
 
-            <button class="btn btn-login w-100">
-                MASUK →
-            </button>
+    <div class="d-flex justify-content-between small-text mb-4">
+        <div><input type="checkbox" name="remember"> Ingat</div>
+        <div>v2.0</div>
+    </div>
 
-            <div class="mt-4 small-text">
-                <span style="color:#00ff9c;">●</span> Sistem aktif
-            </div>
+    <button type="submit" class="btn btn-login w-100">
+        MASUK →
+    </button>
 
-        </form>
+    <div class="mt-4 small-text">
+        <span style="color:#00ff9c;">●</span> Sistem aktif
+    </div>
+</form>
 
     </div>
 
 </div>
-
-<script>
-function loginSystem(e){
-    e.preventDefault()
-
-    let user = document.getElementById("username").value
-    let pass = document.getElementById("password").value
-
-    if(user === "admin" && pass === "admin123"){
-        window.location.href = "/admin/dashboard"
-        return
-    }
-
-    if(user === "kasir" && pass === "kasir123"){
-        window.location.href = "/kasir/bookings"
-        return
-    }
-
-    alert("Username atau Password salah!")
-}
-</script>
 
 @endsection

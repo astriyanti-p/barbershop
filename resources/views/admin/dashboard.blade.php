@@ -75,29 +75,51 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-const ctx = document.getElementById('bookingChart');
+const shop = document.getElementById("filterShop");
+const fromDate = document.getElementById("filterFromDate");
+const toDate = document.getElementById("filterToDate");
 
-new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Sen','Sel','Rab','Kam','Jum','Sab','Min'],
-        datasets: [{
-            label: 'Jumlah Booking',
-            data: [12, 19, 9, 14, 22, 30, 25],
-            borderColor: '#ffc107',
-            backgroundColor: 'rgba(255,193,7,0.1)',
-            tension: 0.4,
-            fill: true
-        }]
-    },
-    options: {
-        plugins: { legend: { labels: { color: "#fff" } } },
-        scales: {
-            x: { ticks: { color:"#aaa" } },
-            y: { ticks: { color:"#aaa" } }
+function filterData() {
+
+    const rows = document.querySelectorAll("#paymentTable tr");
+
+    let shopVal = shop.value;
+    let from = fromDate.value;
+    let to = toDate.value;
+
+    let total = 0;
+
+    rows.forEach(row => {
+
+        let date = row.dataset.date;
+        let status = row.dataset.status;
+        let shopRow = row.dataset.shop;
+
+        let matchDate =
+            (!from || date >= from) &&
+            (!to || date <= to);
+
+        let matchShop =
+            (!shopVal || shopVal === shopRow);
+
+        let match = matchDate && matchShop;
+
+        row.style.display = match ? "" : "none";
+
+        if (match && status === "paid") {
+            total++;
         }
-    }
-});
+
+    });
+
+    document.getElementById("totalVisitors").innerText = total;
+}
+
+shop.addEventListener("change", filterData);
+fromDate.addEventListener("change", filterData);
+toDate.addEventListener("change", filterData);
+
+filterData();
 </script>
 
 @endsection

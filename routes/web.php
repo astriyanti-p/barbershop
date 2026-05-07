@@ -5,11 +5,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BarberRegisterController;
+use App\Http\Controllers\Admin\DataPengunjungController;
+use App\Http\Controllers\Admin\BookingsController;
 
 /* ================= REGISTER ================= */
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
+
+Route::post('/register-barber', [BarberRegisterController::class, 'store']);
 
 Route::post('/register', function (Request $request) {
 
@@ -63,85 +69,139 @@ Route::get('/daftar-barbershop', function () {
 
 
 /* ================= ADMIN ================= */
-Route::prefix('admin')->group(function () {
+    Route::prefix('admin')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [AuthController::class, 'login'])->name('admin.login.submit');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
+      // Semua route admin di bawah ini wajib sudah login
+    Route::middleware('auth')->group(function () {
+        
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('admin.dashboard');
 
-    /* LOGIN ADMIN */
-    Route::get('/login', function () {
-        return view('admin.login');
-    })->name('admin.login');
-
-    /* DASHBOARD */
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-
-    /* BOOKING */
-    Route::get('/bookings', function () {
-        return view('admin.bookings');
-    })->name('admin.bookings');
-
-    // ✅ FIX: ini sebelumnya salah route (double /admin)
-    Route::get('/bookings/{id}', function ($id) {
-        return view('admin.bookings-show', compact('id'));
-    })->name('admin.bookings.show');
-
-    /* USERS */
-    Route::get('/users', function () {
-        return view('admin.users');
-    })->name('admin.users');
-
-    /* REPORTS */
-    Route::get('/reports', function () {
-        return view('admin.reports');
-    })->name('admin.reports');
-
-    /* FINANCE */
-    Route::get('/finance', function () {
-        return view('admin.finance');
-    })->name('admin.finance');
-
-    /* BARBER */
-    Route::get('/barber', function () {
-        return view('admin.barber');
-    })->name('admin.barber');
-
-    Route::get('/barber/{id}', function ($id) {
-        return view('admin.barber-detail');
-    })->name('admin.barber.detail');
-
-    /* CATALOG */
-    Route::get('/catalog', function () {
-        return view('admin.catalog');
-    })->name('admin.catalog');
-
-    /* PRODUCTS */
-    Route::get('/products', function () {
-        return view('admin.products');
-    })->name('admin.products');
-
-    /* ATTENDANCE */
-    Route::get('/attendance', function () {
-        return view('admin.attendance');
-    })->name('admin.attendance');
+Route::get('/bookings', [BookingsController::class, 'index'])
+    ->name('admin.bookings');
+        
+        Route::get('/bookings/{id}', function ($id) {
+            return view('admin.bookings-show', compact('id'));
+        })->name('admin.bookings.show');
+        
+        Route::get('/users', function () {
+            return view('admin.users');
+        })->name('admin.users');
+        
+        Route::get('/reports', function () {
+            return view('admin.reports');
+        })->name('admin.reports');
+        
+        
+        Route::get('/barber', function () {
+            return view('admin.barber');
+        })->name('admin.barber');
+        Route::get('/admin/barber/edit/{id}', function ($id) {
+    return view('admin.edit-barber', compact('id'));
+})->name('admin.barber.edit');
+        
+        Route::get('/barber/{id}', function ($id) {
+            return view('admin.barber-detail');
+        })->name('admin.barber.detail');
+        
+        Route::get('/catalog', function () {
+            return view('admin.catalog');
+        })->name('admin.catalog');
+        
+        Route::get('/products', function () {
+            return view('admin.products');
+        })->name('admin.products');
+        
+        Route::get('/attendance', function () {
+            return view('admin.attendance');
+        })->name('admin.attendance');
+        Route::get('/data-pengunjung', [DataPengunjungController::class, 'index'])
+        ->name('admin.data-pengunjung');
+});
+        
 });
 
 
-/* ================= KASIR ================= */
-Route::prefix('kasir')->group(function () {
+    // /* LOGIN ADMIN */
+    // Route::get('/login', function () {
+    //     return view('admin.login');
+    // })->name('admin.login');
 
-    Route::get('/dashboard', function () {
-        return view('kasir.dashboard');
-    })->name('kasir.dashboard');
+//     /* DASHBOARD */
+//     Route::get('/dashboard', function () {
+//         return view('admin.dashboard');
+//     })->name('admin.dashboard');
 
-    Route::get('/bookings', function () {
-        return view('kasir.bookings');
-    })->name('kasir.bookings');
+//     /* BOOKING */
+//     Route::get('/bookings', function () {
+//         return view('admin.bookings');
+//     })->name('admin.bookings');
 
-    Route::get('/products', function () {
-        return view('kasir.products');
-    })->name('kasir.products');
+//     // ✅ FIX: ini sebelumnya salah route (double /admin)
+//     Route::get('/bookings/{id}', function ($id) {
+//         return view('admin.bookings-show', compact('id'));
+//     })->name('admin.bookings.show');
 
-});
+//     /* USERS */
+//     Route::get('/users', function () {
+//         return view('admin.users');
+//     })->name('admin.users');
+
+//     /* REPORTS */
+//     Route::get('/reports', function () {
+//         return view('admin.reports');
+//     })->name('admin.reports');
+
+//     /* FINANCE */
+//     Route::get('/finance', function () {
+//         return view('admin.finance');
+//     })->name('admin.finance');
+
+//     /* BARBER */
+//     Route::get('/barber', function () {
+//         return view('admin.barber');
+//     })->name('admin.barber');
+
+//     Route::get('/barber/{id}', function ($id) {
+//         return view('admin.barber-detail');
+//     })->name('admin.barber.detail');
+
+//     /* CATALOG */
+//     Route::get('/catalog', function () {
+//         return view('admin.catalog');
+//     })->name('admin.catalog');
+
+//     /* PRODUCTS */
+//     Route::get('/products', function () {
+//         return view('admin.products');
+//     })->name('admin.products');
+
+//     /* ATTENDANCE */
+//     Route::get('/attendance', function () {
+//         return view('admin.attendance');
+//     })->name('admin.attendance');
+// });
+
+
+// /* ================= KASIR ================= */
+// Route::prefix('kasir')->group(function () {
+
+//     Route::get('/dashboard', function () {
+//         return view('kasir.dashboard');
+//     })->name('kasir.dashboard');
+
+//     Route::get('/bookings', function () {
+//         return view('kasir.bookings');
+//     })->name('kasir.bookings');
+
+//     Route::get('/products', function () {
+//         return view('kasir.products');
+//     })->name('kasir.products');
+
+// });
 
 
 /* ================= USER ================= */
@@ -167,7 +227,3 @@ Route::view('/detail-booking', 'user.detail-booking');
 
 
 /* ================= LOGOUT ================= */
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/');
-})->name('logout');
