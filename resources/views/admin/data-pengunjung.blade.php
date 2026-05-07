@@ -17,16 +17,47 @@
     border-radius: 12px;
 }
 
+/* INPUT & SELECT */
 .search-box {
     background: #0d0d0d;
     border: 1px solid #222;
     color: #fff;
     padding: 10px;
     border-radius: 8px;
+    transition: 0.2s ease;
 }
 
-.page-title { color:#fff; font-weight:700; }
-.small-text { font-size:12px; color:#888; }
+/* 🔥 INI YANG KAMU MAU (ISI JADI PUTIH SAAT FOCUS/HOVER) */
+.search-box:hover,
+.search-box:focus {
+    background: #fff;
+    color: #000;
+    border: 1px solid #fff;
+    outline: none;
+}
+
+/* biar option dropdown tetap terbaca */
+.search-box option {
+    color: #000;
+}
+
+/* BUTTON HOVER */
+.btn-outline-light:hover {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+    transition: 0.2s ease;
+}
+
+.page-title {
+    color:#fff;
+    font-weight:700;
+}
+
+.small-text {
+    font-size:12px;
+    color:#888;
+}
 </style>
 
 <div class="topbar mb-4">
@@ -53,10 +84,10 @@
             <select id="filterShop" class="search-box w-100">
     <option value="">Semua Barbershop</option>
     @foreach($barbers as $b)
-        <option value="{{ $b->id }}">
-            {{ $b->name }}
-        </option>
-    @endforeach
+<option value="{{ optional($b->barberProfile)->shop_name }}">
+    {{ optional($b->barberProfile)->shop_name }}
+</option>
+@endforeach
 </select>
         </div>
 
@@ -71,7 +102,13 @@
         </div>
 
     </div>
+    <div class="mt-3 text-end">
+    <button id="resetFilter" class="btn btn-sm btn-outline-light">
+        Reset
+    </button>
 </div>
+</div>
+
 
 {{-- TABLE --}}
 <div class="card-dark p-3">
@@ -93,11 +130,11 @@
 <tr 
     data-date="{{ $v->booking_date }}" 
     data-status="{{ $v->payment_status }}" 
-    data-shop="{{ $v->barber_id }}"
+    data-shop="{{ optional($v->barber->barberProfile)->shop_name }}"
 >
     <td>{{ $v->customer->name ?? '-' }}</td>
-    <td>{{ $v->order_type }}</td>
-    <td>{{ $v->barber->name ?? '-' }}</td>
+    <td>{{ optional($v->service)->name ?? '-' }}</td>
+    <td>{{ optional($v->barber->barberProfile)->shop_name ?? '-' }}</td>
     <td>{{ $v->booking_date }}</td>
     <td>
         @if($v->payment_status == 'paid')
@@ -139,7 +176,7 @@ function filterData() {
             (!to || date <= to);
 
         let matchShop =
-            (!shopVal || shopVal === shopRow);
+            (!shopVal || shopVal.trim().toLowerCase() === shopRow.trim().toLowerCase());
 
         let match = matchDate && matchShop;
 
@@ -153,6 +190,15 @@ function filterData() {
 
     document.getElementById("totalVisitors").innerText = total;
 }
+document.getElementById("resetFilter").addEventListener("click", () => {
+
+    shop.value = "";
+    fromDate.value = "";
+    toDate.value = "";
+
+    filterData();
+
+});
 
 // event
 shop.addEventListener("change", filterData);
@@ -161,5 +207,10 @@ toDate.addEventListener("change", filterData);
 
 // run pertama
 filterData();
+
+// auto refresh setiap 10 detik
+setInterval(() => {
+    location.reload();
+}, 10000);
 </script>
 @endsection

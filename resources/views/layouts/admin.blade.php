@@ -143,10 +143,10 @@ body{
     class="menu-item {{ Request::is('admin/reports') ? 'menu-active' : '' }}">
    Report
     </a>
-    <a href="{{ url('/admin/data pengunjung') }}"
-    class="menu-item {{ Request::is('admin/data pengunjung') ? 'menu-active' : '' }}">
+    <a href="{{ route('admin.data-pengunjung') }}"
+   class="menu-item {{ Request::is('admin/data-pengunjung') ? 'menu-active' : '' }}">
    Data Pengunjung
-    </a>
+</a>
     <a href="{{ url('/admin/barber') }}"
     class="menu-item {{ Request::is('admin/barber') ? 'menu-active' : '' }}">
    Manajemen Barbershop

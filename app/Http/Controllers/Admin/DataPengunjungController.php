@@ -11,12 +11,19 @@ class DataPengunjungController extends Controller
 {
     public function index(Request $request)
 {
-    $query = Order::with(['barber','customer'])
-        ->where('payment_status', 'paid');
+   $query = Order::with([
+    'barber.barberProfile',
+    'customer',
+    'service'
+])
+->where('payment_status', 'paid');
 
-    if ($request->filled('barber_id')) {
-        $query->where('barber_id', $request->barber_id);
-    }
+   if ($request->filled('shop_name')) {
+    $query->whereHas('barber.barberProfile', function ($q) use ($request) {
+        $q->where('shop_name', 'like', '%' . $request->shop_name . '%');
+    });
+}
+
 
     if ($request->filled('from')) {
         $query->whereDate('booking_date', '>=', $request->from);
@@ -30,11 +37,12 @@ class DataPengunjungController extends Controller
 
     $totalVisitors = $visitors->unique('customer_id')->count();
 
-     $barbers = User::where('role','barber')->get();
-     
+    $barbers = User::where('role','barber')->get();
+
     return view('admin.data-pengunjung', [
         'visitors' => $visitors,
-        'totalVisitors' => $totalVisitors
+        'totalVisitors' => $totalVisitors,
+        'barbers' => $barbers
     ]);
 }
 }

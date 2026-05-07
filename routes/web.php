@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BarberRegisterController;
 use App\Http\Controllers\Admin\DataPengunjungController;
+use App\Http\Controllers\Admin\BookingsController;
 
 /* ================= REGISTER ================= */
 Route::get('/register', function () {
@@ -78,10 +79,9 @@ Route::get('/daftar-barbershop', function () {
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
-        
-        Route::get('/bookings', function () {
-            return view('admin.bookings');
-        })->name('admin.bookings');
+
+Route::get('/bookings', [BookingsController::class, 'index'])
+    ->name('admin.bookings');
         
         Route::get('/bookings/{id}', function ($id) {
             return view('admin.bookings-show', compact('id'));
@@ -95,9 +95,6 @@ Route::get('/daftar-barbershop', function () {
             return view('admin.reports');
         })->name('admin.reports');
         
-        Route::get('/data-pengunjung', function () {
-            return view('admin.data-pengunjung');
-        })->name('admin.data-pengunjung');
         
         Route::get('/barber', function () {
             return view('admin.barber');
