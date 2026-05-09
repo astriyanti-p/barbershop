@@ -82,10 +82,15 @@ Route::get('/daftar-barbershop', function () {
 
 Route::get('/bookings', [BookingsController::class, 'index'])
     ->name('admin.bookings');
+
+    Route::get('/admin/bookings/data', [BookingsController::class, 'data'])
+    ->name('admin.bookings.data');
         
-        Route::get('/bookings/{id}', function ($id) {
-            return view('admin.bookings-show', compact('id'));
-        })->name('admin.bookings.show');
+        Route::get('/bookings/{id}', [BookingsController::class, 'show'])
+    ->name('admin.bookings.show');
+
+    Route::get('/bookings-print', [BookingsController::class, 'print'])
+    ->name('admin.bookings.print');
         
         Route::get('/users', function () {
             return view('admin.users');
@@ -99,9 +104,10 @@ Route::get('/bookings', [BookingsController::class, 'index'])
         Route::get('/barber', function () {
             return view('admin.barber');
         })->name('admin.barber');
-        Route::get('/admin/barber/edit/{id}', function ($id) {
-    return view('admin.edit-barber', compact('id'));
-})->name('admin.barber.edit');
+
+        Route::get('/admin/barber/edit/{id}', function ($id){
+            return view('admin.edit-barber', compact('id'));})
+        ->name('admin.barber.edit');
         
         Route::get('/barber/{id}', function ($id) {
             return view('admin.barber-detail');
@@ -120,6 +126,11 @@ Route::get('/bookings', [BookingsController::class, 'index'])
         })->name('admin.attendance');
         Route::get('/data-pengunjung', [DataPengunjungController::class, 'index'])
         ->name('admin.data-pengunjung');
+
+        //Function untuk filter data pengunjung (tanggal & customer)
+        Route::get('/visitors/data', [DataPengunjungController::class, 'data'])
+    ->name('admin.visitors.data');
+        Route::get('/visitors-print',[DataPengunjungController::class, 'print'])->name('admin.visitors.print');
 });
         
 });
