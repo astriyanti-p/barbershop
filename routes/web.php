@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BarberRegisterController;
 use App\Http\Controllers\Admin\DataPengunjungController;
 use App\Http\Controllers\Admin\BookingsController;
+use App\Http\Controllers\Admin\AdminBarberController;
+use App\Http\Controllers\AdminUserController;
 
 /* ================= REGISTER ================= */
 Route::get('/register', function () {
@@ -75,53 +77,78 @@ Route::get('/daftar-barbershop', function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
       // Semua route admin di bawah ini wajib sudah login
     Route::middleware('auth')->group(function () {
-        
+
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
 Route::get('/bookings', [BookingsController::class, 'index'])
     ->name('admin.bookings');
-        
+
         Route::get('/bookings/{id}', function ($id) {
             return view('admin.bookings-show', compact('id'));
         })->name('admin.bookings.show');
-        
-        Route::get('/users', function () {
-            return view('admin.users');
-        })->name('admin.users');
-        
+
+
+        //USER
+        Route::get('/users', [AdminUserController::class, 'index'])
+        ->name('admin.users');
+
+        Route::get('/users/edit/{id}', [AdminUserController::class, 'edit'])
+        ->name('admin.users.edit');
+
+        Route::put('/users/update/{id}', [AdminUserController::class, 'update'])
+        ->name('admin.users.update');
+
+        Route::delete('/users/{id}', [AdminUserController::class, 'delete'])
+        ->name('admin.users.delete');
+
+        Route::get('/users/create', [AdminUserController::class, 'create'])
+        ->name('admin.users.create');
+
+        Route::post('/users/store', [AdminUserController::class, 'store'])
+        ->name('admin.users.store');
+
+
         Route::get('/reports', function () {
             return view('admin.reports');
         })->name('admin.reports');
-        
-        
-        Route::get('/barber', function () {
-            return view('admin.barber');
-        })->name('admin.barber');
-        Route::get('/admin/barber/edit/{id}', function ($id) {
-    return view('admin.edit-barber', compact('id'));
-})->name('admin.barber.edit');
-        
-        Route::get('/barber/{id}', function ($id) {
-            return view('admin.barber-detail');
-        })->name('admin.barber.detail');
-        
-        Route::get('/catalog', function () {
-            return view('admin.catalog');
-        })->name('admin.catalog');
-        
+
+
+        //BARBER
+        Route::get('/barber', [AdminBarberController::class, 'index'])
+        ->name('admin.barber');
+
+        Route::get('/barber/edit/{id}', [AdminBarberController::class, 'edit'])
+        ->name('admin.barber.edit');
+
+        Route::get('/barber/{id}', [AdminBarberController::class, 'detail'])
+        ->name('admin.barber.detail');
+
+        Route::put('/barber/update/{id}', [AdminBarberController::class, 'update'])
+        ->name('admin.barber.update');
+
+        Route::post('/barber/{id}/approve', [AdminBarberController::class, 'approve'])
+        ->name('admin.barber.approve');
+
+        Route::post('/barber/{id}/reject', [AdminBarberController::class, 'reject'])
+        ->name('admin.barber.reject');
+
+        Route::delete('/barber/{id}', [AdminBarberController::class, 'delete'])
+        ->name('admin.barber.delete');
+
+        //PRODUCT
         Route::get('/products', function () {
             return view('admin.products');
         })->name('admin.products');
-        
+
         Route::get('/attendance', function () {
             return view('admin.attendance');
         })->name('admin.attendance');
         Route::get('/data-pengunjung', [DataPengunjungController::class, 'index'])
         ->name('admin.data-pengunjung');
 });
-        
+
 });
 
 

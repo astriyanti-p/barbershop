@@ -16,13 +16,6 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
     use HasApiTokens;
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
         protected $fillable = [
         'name',
         'username',
@@ -52,7 +45,7 @@ class User extends Authenticatable
 
     // RELASI KE BARBER PROFILE
     public function barberProfile()
-    {
-        return $this->hasOne(BarberProfile::class);
-    }
+{
+    return $this->hasOne(BarberProfile::class);
+}
 }

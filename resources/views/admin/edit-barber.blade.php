@@ -4,35 +4,19 @@
 @section('content')
 
 <style>
-.card-dark {
-    background: #121212;
-    border: 1px solid #1f1f1f;
-    border-radius: 12px;
-}
-
+.card-dark { background:#121212; border:1px solid #1f1f1f; border-radius:12px; }
 .yellow { color:#ffc107; }
 .small-text { font-size:12px; color:#888; }
 .page-title { color:#fff; font-weight:700; }
-
-.form-control {
-    background:#111 !important;
-    border:1px solid #333 !important;
-    color:#fff !important;
-}
-
-/* PRODUCT */
-.product-card img{
-    height:180px;
-    object-fit:cover;
-    border-radius:8px;
-}
+.form-control { background:#111 !important; border:1px solid #333 !important; color:#fff !important; }
+.product-card img{ height:180px; object-fit:cover; border-radius:8px; }
 </style>
 
 <div class="topbar">
     <div>
         <div class="small-text yellow">EDIT DATA</div>
         <h1 class="page-title">EDIT BARBERSHOP</h1>
-    </div>  
+    </div>
 </div>
 
 <div class="row mt-3 g-4">
@@ -40,79 +24,72 @@
 <!-- FOTO -->
 <div class="col-md-4">
     <div class="card-dark p-3 text-center">
-
         <img id="previewImage"
-             src="https://images.unsplash.com/photo-1622287162716-74d9f54c16f6"
+             src="{{ $barber->photo ?? 'https://via.placeholder.com/500x300' }}"
              class="img-fluid rounded mb-3"
              style="height:250px; width:100%; object-fit:cover;">
 
         <input type="file" id="uploadFoto" accept="image/*" hidden>
-
         <button type="button" class="btn btn-warning w-100" id="btnGantiFoto">
             Ganti Foto
         </button>
-
     </div>
 </div>
 
 <!-- FORM -->
 <div class="col-md-8">
 <div class="card-dark p-4">
-
 <div class="row g-3">
 
 <div class="col-md-6">
 <label>Nama Barbershop</label>
-<input class="form-control" value="Obsidian Barbershop">
+<input class="form-control" value="{{ $barber->shop_name }}">
 </div>
 
 <div class="col-md-6">
 <label>Nama Pemilik</label>
-<input class="form-control" value="Hadi Syahputra">
+<input class="form-control" value="{{ $barber->user->name ?? '-' }}">
 </div>
 
 <div class="col-md-6">
 <label>Email</label>
-<input class="form-control" value="obsidian@mail.com">
+<input class="form-control" value="{{ $barber->user->email ?? '-' }}">
 </div>
 
 <div class="col-md-6">
 <label>No HP</label>
-<input class="form-control" value="08123456789">
+<input class="form-control" value="{{ $barber->user->phone ?? '-' }}">
 </div>
 
 <div class="col-md-6">
 <label>Kota</label>
-<input class="form-control" value="Surabaya">
+<input class="form-control" value="{{ $barber->user->city ?? '-' }}">
 </div>
 
 <div class="col-md-12">
 <label>Alamat</label>
-<input class="form-control" value="Jl. Mawar No 12, Surabaya">
+<input class="form-control" value="{{ $barber->user->address ?? '-' }}">
 </div>
 
 <div class="col-md-6">
 <label>Jam Operasional</label>
-<input class="form-control" value="09:00 - 21:00">
+<input class="form-control"
+value="@foreach($barber->schedules as $s) {{ $s->day_of_week }} {{ substr($s->start_time,0,5) }}-{{ substr($s->end_time,0,5) }}, @endforeach">
 </div>
 
 <div class="col-md-6">
 <label>Deskripsi</label>
-<textarea class="form-control">Barbershop premium dengan barber profesional</textarea>
+<textarea class="form-control">{{ $barber->bio }}</textarea>
 </div>
 
 </div>
-
 </div>
 </div>
 </div>
 
-<!-- SERVICE -->
+{{-- ================= SERVICE ================= --}}
 <div class="card-dark p-4 mt-4">
-
-<div class="d-flex justify-content-between align-items-center">
-<h4 class="yellow">Service (Max 5)</h4>
-</div>
+<h4 class="yellow">Service</h4>
 
 <table class="table table-dark table-borderless mt-3">
 <thead>
@@ -125,133 +102,64 @@
 </thead>
 
 <tbody id="serviceTable">
-
+@foreach($barber->services as $service)
 <tr>
-<td><input class="form-control" value="Haircut Premium"></td>
-<td><input class="form-control" value="45 menit"></td>
-<td><input class="form-control" value="120000"></td>
+<td><input class="form-control" value="{{ $service->name }}"></td>
+<td><input class="form-control" value="{{ $service->duration }} menit"></td>
+<td><input class="form-control" value="{{ $service->price }}"></td>
 <td><button class="btn btn-danger btn-sm" onclick="removeRow(this)">Hapus</button></td>
 </tr>
-
-<tr>
-<td><input class="form-control" value="Beard Styling"></td>
-<td><input class="form-control" value="30 menit"></td>
-<td><input class="form-control" value="80000"></td>
-<td><button class="btn btn-danger btn-sm" onclick="removeRow(this)">Hapus</button></td>
-</tr>
-
+@endforeach
 </tbody>
 </table>
 </div>
 
-<!-- PRODUCT -->
+{{-- ================= PRODUCT ================= --}}
 <div class="card-dark p-4 mt-4">
-
 <h4 class="yellow">Product</h4>
 
 <div class="row g-3">
-
-<!-- PRODUCT 1 -->
+@foreach($barber->products as $product)
 <div class="col-md-4">
 <div class="card-dark p-3">
 
-<img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a" class="img-fluid mb-2">
+<img src="{{ $product->image ?? 'https://via.placeholder.com/300x200' }}" class="img-fluid mb-2">
 
-<input class="form-control mb-2" value="Pomade Strong Hold">
-<textarea class="form-control mb-2">Tahan lama styling rambut</textarea>
-<input class="form-control" value="75000">
-
-</div>
-</div>
-
-<!-- PRODUCT 2 -->
-<div class="col-md-4">
-<div class="card-dark p-3">
-
-<img src="https://images.unsplash.com/photo-1621607512022-6aecc4fed814" class="img-fluid mb-2">
-
-<input class="form-control mb-2" value="Hair Powder">
-<textarea class="form-control mb-2">Volume rambut natural</textarea>
-<input class="form-control" value="60000">
+<input class="form-control mb-2" value="{{ $product->name }}">
+<textarea class="form-control mb-2">{{ $product->description }}</textarea>
+<input class="form-control" value="{{ $product->price }}">
 
 </div>
 </div>
-
-<!-- PRODUCT 3 -->
-<div class="col-md-4">
-<div class="card-dark p-3">
-
-<img src="https://images.unsplash.com/photo-1615397349754-cfa2066a298e" class="img-fluid mb-2">
-
-<input class="form-control mb-2" value="Beard Oil">
-<textarea class="form-control mb-2">Merawat jenggot agar lembut</textarea>
-<input class="form-control" value="90000">
-
+@endforeach
 </div>
 </div>
 
-</div>
-</div>
-
-<!-- SAVE -->
 <div class="mt-4 text-end">
-    <button class="btn btn-success px-4" onclick="saveAndBack()">
-    Simpan Perubahan
-</button>
+    <button class="btn btn-success px-4" onclick="saveAndBack()">Simpan Perubahan</button>
 </div>
 
 <script>
-
-/* ================= FOTO ================= */
-document.getElementById("btnGantiFoto").addEventListener("click", function () {
+document.getElementById("btnGantiFoto").onclick = () => {
     document.getElementById("uploadFoto").click();
-});
+};
 
-document.getElementById("uploadFoto").addEventListener("change", function (e) {
-    let file = e.target.files[0];
-
-    if (file) {
-        let reader = new FileReader();
-        reader.onload = function (event) {
-            document.getElementById("previewImage").src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-/* ================= SERVICE ================= */
-function addService(){
-
-    let table = document.getElementById("serviceTable");
-    let rows = table.querySelectorAll("tr").length;
-
-    if(rows >= 5){
-        alert("Maksimal 5 service saja!");
-        return;
-    }
-
-    table.innerHTML += `
-    <tr>
-        <td><input class="form-control"></td>
-        <td><input class="form-control"></td>
-        <td><input class="form-control"></td>
-        <td><button class="btn btn-danger btn-sm" onclick="removeRow(this)">Hapus</button></td>
-    </tr>`;
-}
+document.getElementById("uploadFoto").onchange = e => {
+    let reader = new FileReader();
+    reader.onload = event => {
+        document.getElementById("previewImage").src = event.target.result;
+    };
+    reader.readAsDataURL(e.target.files[0]);
+};
 
 function removeRow(btn){
     btn.closest("tr").remove();
 }
 
-/* ================= SAVE & BACK ================= */
-function saveAndBack() {
-    // simulasi save (frontend only)
+function saveAndBack(){
     alert("Data berhasil disimpan!");
-
-    // balik ke halaman manajemen barber
     window.location.href = "{{ url('/admin/barber') }}";
 }
-
 </script>
 
 @endsection
