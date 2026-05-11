@@ -139,10 +139,6 @@ body{
     class="menu-item {{ Request::is('admin/users') ? 'menu-active' : '' }}">
    User
     </a>
-    <a href="{{ url('/admin/reports') }}"
-    class="menu-item {{ Request::is('admin/reports') ? 'menu-active' : '' }}">
-   Report
-    </a>
     <a href="{{ route('admin.data-pengunjung') }}"
    class="menu-item {{ Request::is('admin/data-pengunjung') ? 'menu-active' : '' }}">
    Data Pengunjung
@@ -150,14 +146,6 @@ body{
     <a href="{{ url('/admin/barber') }}"
     class="menu-item {{ Request::is('admin/barber') ? 'menu-active' : '' }}">
    Manajemen Barbershop
-    </a>
-    <a href="{{ url('/admin/products') }}"
-    class="menu-item {{ Request::is('admin/products') ? 'menu-active' : '' }}">
-   Product
-    </a>
-    <a href="{{ url('/admin/attendance') }}"
-    class="menu-item {{ Request::is('admin/attendance') ? 'menu-active' : '' }}">
-   Presensi Staff
     </a>
     <!-- logout -->
     <div style="position:absolute; bottom:20px; width:100%; padding:0 20px;">

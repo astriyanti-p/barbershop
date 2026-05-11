@@ -138,6 +138,40 @@ Route::get('/bookings', [BookingsController::class, 'index'])
         ->name('admin.barber.delete');
 
         //PRODUCT
+    Route::get('/admin/bookings/data', [BookingsController::class, 'data'])
+    ->name('admin.bookings.data');
+        
+        Route::get('/bookings/{id}', [BookingsController::class, 'show'])
+    ->name('admin.bookings.show');
+
+    Route::get('/bookings-print', [BookingsController::class, 'print'])
+    ->name('admin.bookings.print');
+        
+        Route::get('/users', function () {
+            return view('admin.users');
+        })->name('admin.users');
+        
+        Route::get('/reports', function () {
+            return view('admin.reports');
+        })->name('admin.reports');
+        
+        
+        Route::get('/barber', function () {
+            return view('admin.barber');
+        })->name('admin.barber');
+
+        Route::get('/admin/barber/edit/{id}', function ($id){
+            return view('admin.edit-barber', compact('id'));})
+        ->name('admin.barber.edit');
+        
+        Route::get('/barber/{id}', function ($id) {
+            return view('admin.barber-detail');
+        })->name('admin.barber.detail');
+        
+        Route::get('/catalog', function () {
+            return view('admin.catalog');
+        })->name('admin.catalog');
+        
         Route::get('/products', function () {
             return view('admin.products');
         })->name('admin.products');
@@ -147,6 +181,11 @@ Route::get('/bookings', [BookingsController::class, 'index'])
         })->name('admin.attendance');
         Route::get('/data-pengunjung', [DataPengunjungController::class, 'index'])
         ->name('admin.data-pengunjung');
+
+        //Function untuk filter data pengunjung (tanggal & customer)
+        Route::get('/visitors/data', [DataPengunjungController::class, 'data'])
+    ->name('admin.visitors.data');
+        Route::get('/visitors-print',[DataPengunjungController::class, 'print'])->name('admin.visitors.print');
 });
 
 });
