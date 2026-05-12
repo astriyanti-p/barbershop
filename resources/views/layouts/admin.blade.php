@@ -125,7 +125,7 @@ body{
 @if(!Request::is('admin/login'))
 
 <div class="sidebar">
-    <div class="brand">OBSIDIAN AMBER</div>
+    <div class="brand">Barber Cave</div>
 
     <a href="{{ url('/admin/dashboard') }}"
    class="menu-item {{ Request::is('admin/dashboard') ? 'menu-active' : '' }}">

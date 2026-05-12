@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\BarberRegisterController;
 use App\Http\Controllers\Admin\DataPengunjungController;
 use App\Http\Controllers\Admin\BookingsController;
 use App\Http\Controllers\Admin\AdminBarberController;
-use App\Http\Controllers\AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
