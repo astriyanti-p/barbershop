@@ -80,7 +80,7 @@ Route::get('/daftar-barbershop', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
-Route::get('/bookings', [BookingsController::class, 'index'])
+    Route::get('/bookings', [BookingsController::class, 'index'])
     ->name('admin.bookings');
 
     Route::get('/admin/bookings/data', [BookingsController::class, 'data'])
@@ -121,17 +121,21 @@ Route::get('/bookings', [BookingsController::class, 'index'])
             return view('admin.products');
         })->name('admin.products');
         
-        Route::get('/attendance', function () {
-            return view('admin.attendance');
-        })->name('admin.attendance');
         Route::get('/data-pengunjung', [DataPengunjungController::class, 'index'])
         ->name('admin.data-pengunjung');
 
         //Function untuk filter data pengunjung (tanggal & customer)
         Route::get('/visitors/data', [DataPengunjungController::class, 'data'])
-    ->name('admin.visitors.data');
-        Route::get('/visitors-print',[DataPengunjungController::class, 'print'])->name('admin.visitors.print');
+        ->name('admin.visitors.data');
+        Route::get('/visitors-print',[DataPengunjungController::class, 'print'])
+        ->name('admin.visitors.print');
+
+        /* ✅ FIX FINANCE (FRONTEND ONLY) */
+        Route::get('/finance', function () {
+            return view('admin.finance');
+        })->name('admin.finance');
 });
+
         
 });
 

@@ -117,6 +117,7 @@ body{
     border-left:4px solid #ffc107;
     color:#ffc107 !important;
 }
+
 </style>
 </head>
 
@@ -146,7 +147,10 @@ body{
     <a href="{{ url('/admin/barber') }}"
     class="menu-item {{ Request::is('admin/barber') ? 'menu-active' : '' }}">
    Manajemen Barbershop
-    </a>
+    <a href="{{ url('/admin/finance') }}"
+   class="menu-item {{ Request::is('admin/finance') ? 'menu-active' : '' }}">
+   Finance
+</a>
     <!-- logout -->
     <div style="position:absolute; bottom:20px; width:100%; padding:0 20px;">
         <form action="{{ route('admin.logout') }}" method="POST">

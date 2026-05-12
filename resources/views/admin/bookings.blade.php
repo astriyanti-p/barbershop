@@ -4,37 +4,65 @@
 @section('content')
 
 <style>
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+    box-sizing: border-box;
+}
+
 body {
     background: #0b0b0b;
     color: #fff;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    margin: 0;
 }
 
+/* =========================
+   CARD
+========================= */
 .card {
     background: linear-gradient(145deg,#1a1a1a,#111);
     border: 1px solid #1f1f1f;
     color: #fff;
+    border-radius: 12px;
 }
 
+/* =========================
+   FORM
+========================= */
 .form-control,
 .form-select {
     background: #0d0d0d;
     border: 1px solid #222;
     color: #fff;
+    transition: 0.2s ease;
 }
 
 .form-control:focus,
 .form-select:focus {
-    background: #fff !important;
-    color: #000 !important;
-    border-color: #ffc107 !important;
-    box-shadow: none !important;
+    background: #111;
+    color: #fff;
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255,193,7,.15);
 }
 
-/* TABLE */
+/* =========================
+   TABLE WRAPPER (IMPORTANT)
+========================= */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* =========================
+   TABLE STYLE
+========================= */
 .table-dark-gold {
     width: 100%;
     color: #fff;
     border-collapse: collapse;
+    min-width: 700px; /* biar gak hancur di layar kecil */
 }
 
 .table-dark-gold thead th {
@@ -43,6 +71,7 @@ body {
     text-transform: uppercase;
     padding: 14px;
     border-bottom: 2px solid #ffc107;
+    white-space: nowrap;
 }
 
 .table-dark-gold tbody td {
@@ -50,17 +79,34 @@ body {
     border-bottom: 1px solid #1f1f1f;
 }
 
+.table-dark-gold tbody tr {
+    transition: background 0.2s ease;
+}
+
 .table-dark-gold tbody tr:hover {
     background: #151515;
     cursor: pointer;
 }
 
-/* PAGINATION */
+/* =========================
+   BADGE STATUS (optional tapi bagus)
+========================= */
+.badge {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    display: inline-block;
+}
+
+/* =========================
+   PAGINATION
+========================= */
 .pagination-box {
     display: flex;
     justify-content: center;
     gap: 8px;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 .pagination-box button {
@@ -69,11 +115,29 @@ body {
     color: #fff;
     padding: 6px 12px;
     border-radius: 8px;
+    transition: 0.2s ease;
+}
+
+.pagination-box button:hover {
+    border-color: #ffc107;
+    cursor: pointer;
 }
 
 .pagination-box button.active {
     background: #ffc107;
     color: #000;
+    border-color: #ffc107;
+}
+
+/* =========================
+   UTIL
+========================= */
+.text-center {
+    text-align: center;
+}
+
+.text-secondary {
+    color: #aaa;
 }
 </style>
 
@@ -138,7 +202,7 @@ body {
 
     {{-- TABLE --}}
     <div class="card p-3">
-
+    <div class="table-responsive">
         <table class="table-dark-gold">
             <thead>
                 <tr>
@@ -152,6 +216,7 @@ body {
 
             <tbody id="bookingTable"></tbody>
         </table>
+        </div>
 
         <div id="pagination" class="pagination-box"></div>
 
