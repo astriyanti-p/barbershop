@@ -13,21 +13,21 @@ class AdminUserController extends Controller
     {
         $search = $request->search;
 
-        $users = User::when($search, function($query) use ($search){
-                    $query->where('name','like',"%$search%")
-                          ->orWhere('username','like',"%$search%")
-                          ->orWhere('email','like',"%$search%");
-                })
-                ->latest()
-                ->paginate(15); // pagination aktif
+        $users = User::when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%$search%")
+                    ->orWhere('username', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%");
+            })
+            ->latest()
+            ->paginate(10);
 
-        $totalUser  = User::count();
-        $activeUser = User::where('status',1)->count();
-
-        return view('admin.users',
-            compact('users','totalUser','activeUser','search'));
+        return view('admin.users', [
+            'users' => $users,
+            'search' => $search,
+            'totalUser' => User::count(),                 // ✅ TAMBAHKAN
+            'activeUser' => User::where('status', 1)->count(), // ✅ TAMBAHKAN
+        ]);
     }
-
     //FORM TAMBAH USER
     public function create()
     {

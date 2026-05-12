@@ -129,17 +129,23 @@ body {
             <div class="subtitle">Akses Admin & Kasir</div>
         </div>
 
-        <!-- FORM -->
-        <form onsubmit="loginSystem(event)">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            {{ $errors->first() }}
+        </div>
+    @endif
 
+        <!-- FORM -->
+        <form method="POST" action="{{ route('admin.login.submit') }}">
+    @csrf
             <div class="mb-3 text-start">
                 <label class="small-text">Username</label>
-                <input id="username" type="text" class="form-control" placeholder="Masukkan username">
+                <input id="login" name="login" type="text" class="form-control" placeholder="Masukkan username / email">
             </div>
 
             <div class="mb-3 text-start">
                 <label class="small-text">Password</label>
-                <input id="password" type="password" class="form-control" placeholder="Masukkan password">
+                <input id="password" name="password" type="password" class="form-control" placeholder="Masukkan password">
             </div>
 
             <div class="d-flex justify-content-between small-text mb-4">
@@ -160,26 +166,4 @@ body {
     </div>
 
 </div>
-
-<script>
-function loginSystem(e){
-    e.preventDefault()
-
-    let user = document.getElementById("username").value
-    let pass = document.getElementById("password").value
-
-    if(user === "admin" && pass === "admin123"){
-        window.location.href = "/admin/dashboard"
-        return
-    }
-
-    if(user === "kasir" && pass === "kasir123"){
-        window.location.href = "/kasir/bookings"
-        return
-    }
-
-    alert("Username atau Password salah!")
-}
-</script>
-
 @endsection

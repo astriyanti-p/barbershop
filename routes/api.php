@@ -21,7 +21,7 @@ Route::middleware(['auth:sanctum', 'role:barber'])->group(function () {
             'message' => 'Welcome Barber',
             'role' => $request->user()->role
         ]);
-    });
+    }); 
 });
 
 Route::middleware(['auth:sanctum', 'role:barber'])
