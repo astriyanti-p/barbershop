@@ -19,6 +19,6 @@ class Service extends Model
 
     public function barber()
     {
-        return $this->belongsTo(User::class, 'barber_id');
+        return $this->belongsTo(BarberProfile::class, 'barber_id');
     }
 }

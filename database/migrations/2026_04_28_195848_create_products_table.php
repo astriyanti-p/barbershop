@@ -12,16 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('barber_id')->constrained('users')->onDelete('cascade');
-            $table->string('name', 50);
-            $table->text('description')->nullable();
-            $table->decimal('price', 10, 2);
-            $table->integer('stock')->default(0);
-            $table->string('photo', 255)->nullable();
-            $table->boolean('status')->default(true);
-            $table->timestamps();
-        });
+    $table->id();
+
+    //relasi ke barber_profiles
+    $table->foreignId('barber_id')
+          ->constrained('barber_profiles')
+          ->onDelete('cascade');
+
+    $table->string('name', 50);
+    $table->text('description')->nullable();
+    $table->decimal('price', 10, 2);
+    $table->integer('stock')->default(0);
+    $table->string('photo', 255)->nullable();
+    $table->boolean('status')->default(true);
+
+    $table->timestamps();
+});
     }
 
     /**

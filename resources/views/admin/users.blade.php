@@ -90,9 +90,15 @@
                     <a href="/admin/users/edit/{{ $user->id }}"
                        class="btn btn-sm btn-warning">Edit</a>
 
-                    <a href="/admin/users/delete/{{ $user->id }}"
-                       onclick="return confirm('Yakin hapus user ini?')"
-                       class="btn btn-sm btn-danger">Hapus</a>
+                    <form action="{{ route('admin.users.delete',$user->id) }}" method="POST"
+                    onsubmit="return confirm('Yakin hapus user ini?')">
+                @csrf
+                @method('DELETE')
+
+    <button class="btn btn-danger btn-sm">
+        Hapus
+    </button>
+</form>
                 </td>
             </tr>
         @endforeach

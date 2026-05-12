@@ -129,12 +129,6 @@ body {
             <div class="subtitle">Akses Admin & Kasir</div>
         </div>
 
-        @if ($errors->any())
-        <div class="alert alert-danger">
-            {{ $errors->first() }}
-        </div>
-    @endif
-
         <!-- FORM -->
         <form method="POST" action="{{ route('admin.login.submit') }}">
     @csrf
