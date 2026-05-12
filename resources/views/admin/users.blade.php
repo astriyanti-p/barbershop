@@ -10,7 +10,7 @@
     <form method="GET" action="/admin/users" class="w-50">
     <input type="text"
            name="search"
-           value="{{ $search }}"
+           value="{{ $search ?? '' }}"
            class="form-control bg-dark text-white border-0"
            placeholder="Cari nama / username / email..."
            onkeyup="this.form.submit()">
@@ -26,14 +26,14 @@
     <div class="col-md-6">
         <div class="card-dark p-4">
             <small class="text-secondary">TOTAL PENGGUNA</small>
-            <h1>{{ $totalUser }}</h1>
+            <h1>{{ $totalUser ?? 0 }}</h1>
         </div>
     </div>
 
     <div class="col-md-6">
         <div class="card-dark p-4">
             <small class="text-secondary">PENGGUNA AKTIF</small>
-            <h1>{{ $activeUser }}</h1>
+            <h1>{{ $activeUser ?? 0 }}</h1>
             <small class="text-secondary">Status = active</small>
         </div>
     </div>
