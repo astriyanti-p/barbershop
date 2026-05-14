@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
-// 🔥 3 BARIS INI WAJIB DITAMBAHKAN UNTUK FITUR OTP EMAIL
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use App\Mail\OtpMail;
@@ -75,15 +73,7 @@ class AuthController extends Controller
     }
 
     // ==========================================
-    // 3. PROFILE
-    // ==========================================
-    public function profile(Request $request)
-    {
-        return response()->json($request->user());
-    }
-
-    // ==========================================
-    // 4. LOGOUT
+    // 3. LOGOUT
     // ==========================================
     public function logout(Request $request)
     {
@@ -95,7 +85,7 @@ class AuthController extends Controller
     }
 
     // ==========================================
-    // 5. KIRIM OTP (LUPA PASSWORD) - 🔥 FITUR BARU
+    // 4. KIRIM OTP (LUPA PASSWORD)
     // ==========================================
     public function sendOtp(Request $request)
     {
@@ -131,8 +121,9 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
     // ==========================================
-    // 6. VERIFIKASI OTP
+    // 5. VERIFIKASI OTP
     // ==========================================
     public function verifyOtp(Request $request)
     {
@@ -158,7 +149,7 @@ class AuthController extends Controller
     }
 
     // ==========================================
-    // 7. GANTI PASSWORD BARU
+    // 6. GANTI PASSWORD BARU
     // ==========================================
     public function resetPassword(Request $request)
     {

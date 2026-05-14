@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Services\HomeService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -19,8 +17,15 @@ class HomeController extends Controller
 
     public function getMapShops()
     {
-        // Controller hanya menerima data bersih dari Service dan mengembalikannya ke Flutter
+        // Controller HANYA menerima data bersih dari Service 
+        // dan mengembalikannya ke Flutter dalam bentuk JSON
         $data = $this->homeService->getMapShopsData();
+
         return response()->json($data, 200);
+    }
+    public function getPopularStyles() // Nama fungsi tetap sama agar tidak perlu ubah route
+    {
+        $data = $this->homeService->getPopularServices();
+        return response()->json($data);
     }
 }
