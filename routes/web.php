@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BarberRegisterController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\DataPengunjungController;
 use App\Http\Controllers\Admin\BookingsController;
 use App\Http\Controllers\Admin\AdminBarberController;
@@ -159,17 +160,18 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
       // Semua route admin di bawah ini wajib sudah login
     Route::middleware('auth')->group(function () {
 
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
 
-Route::get('/bookings', [BookingsController::class, 'index'])
-    ->name('admin.bookings');
+        //dashboard
+        Route::get('/dashboard',[AdminDashboardController::class,'index'])
+        ->name('admin.dashboard');
+
+        //booking
+        Route::get('/bookings', [BookingsController::class, 'index'])
+        ->name('admin.bookings');
 
         Route::get('/bookings/{id}', function ($id) {
             return view('admin.bookings-show', compact('id'));
         })->name('admin.bookings.show');
-
 
         //USER
         Route::get('/users', [AdminUserController::class, 'index'])

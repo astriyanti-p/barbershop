@@ -15,33 +15,33 @@
     </div>
 </div>
 
-<!-- STAT CARD -->
+<!-- ================= STAT CARD ================= -->
 <div class="row g-4">
 
     <div class="col-md-4">
         <div class="card-dark">
             <div class="small-text">TOTAL BARBERSHOP TERDAFTAR</div>
-            <h1>12</h1>
+            <h1>{{ $totalBarber }}</h1>
         </div>
     </div>
 
     <div class="col-md-4">
         <div class="card-dark">
             <div class="small-text">TOTAL USER (KONSUMEN)</div>
-            <h1 class="yellow">1,284</h1>
+            <h1 class="yellow">{{ $totalUsers }}</h1>
         </div>
     </div>
 
     <div class="col-md-4">
         <div class="card-dark">
-            <div class="small-text">BOOKING HARI INI</div>
-            <h1>47</h1>
+            <div class="small-text">TOTAL SALDO SISTEM</div>
+            <h1>Rp {{ number_format($totalSaldo,0,',','.') }}</h1>
         </div>
     </div>
 
 </div>
 
-<!-- GRAFIK -->
+<!-- ================= GRAFIK ================= -->
 <div class="row mt-4 g-4">
 
     <div class="col-md-8">
@@ -55,71 +55,51 @@
         <div class="card-dark">
             <div class="small-text">AKTIVITAS TERBARU</div>
 
-            <p class="yellow">Booking baru oleh Andi</p>
-            <p class="small-text">5 menit lalu</p>
+            <p class="yellow">Booking baru masuk</p>
+            <p class="small-text">Realtime dari database</p>
             <hr>
 
             <p class="yellow">User baru mendaftar</p>
-            <p class="small-text">20 menit lalu</p>
+            <p class="small-text">Realtime dari database</p>
             <hr>
 
             <p class="yellow">Barbershop baru ditambahkan</p>
-            <p class="small-text">1 jam lalu</p>
+            <p class="small-text">Realtime dari database</p>
         </div>
     </div>
 
 </div>
 
 
-<!-- CHART JS -->
+<!-- ================= CHART JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-const shop = document.getElementById("filterShop");
-const fromDate = document.getElementById("filterFromDate");
-const toDate = document.getElementById("filterToDate");
+const labels = @json($labels);
+const dataBooking = @json($data);
 
-function filterData() {
+const ctx = document.getElementById('bookingChart');
 
-    const rows = document.querySelectorAll("#paymentTable tr");
-
-    let shopVal = shop.value;
-    let from = fromDate.value;
-    let to = toDate.value;
-
-    let total = 0;
-
-    rows.forEach(row => {
-
-        let date = row.dataset.date;
-        let status = row.dataset.status;
-        let shopRow = row.dataset.shop;
-
-        let matchDate =
-            (!from || date >= from) &&
-            (!to || date <= to);
-
-        let matchShop =
-            (!shopVal || shopVal === shopRow);
-
-        let match = matchDate && matchShop;
-
-        row.style.display = match ? "" : "none";
-
-        if (match && status === "paid") {
-            total++;
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Jumlah Booking',
+            data: dataBooking,
+            borderWidth: 3,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true
+            }
         }
-
-    });
-
-    document.getElementById("totalVisitors").innerText = total;
-}
-
-shop.addEventListener("change", filterData);
-fromDate.addEventListener("change", filterData);
-toDate.addEventListener("change", filterData);
-
-filterData();
+    }
+});
 </script>
 
 @endsection
